@@ -1,6 +1,7 @@
 'use client'
 import Image from 'next/image'
 import { useState } from 'react';
+import Items from './components/Items';
 
 export default function Home() {
   const [tasks, settasks] = useState([]);
@@ -21,9 +22,27 @@ export default function Home() {
     }
     let adddedarray = [...tasks,todo]
     settasks(adddedarray)
- 
+    setCategory("");
+    settask("");
+    setdesc("");
   }
 
+  let removetask = (id)=>{
+ 
+    let newarray =tasks.filter((item)=>item.id!==id)
+    settasks(newarray)
+    
+  }
+
+  let updatetask = (taskId)=>{
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === taskId) {
+        return { ...task, iscompleted: !task.iscompleted };
+      }
+      return task;
+    });
+    settasks(updatedTasks);
+  };
   return (
     <div className="h-screen max-w-[90vw] mx-auto">
       <h1 className="text-center bg-black text-white text-4xl py-2 mb-10">
@@ -43,27 +62,12 @@ export default function Home() {
           <button className='bg-black text-white px-6 py-1 ml-2' onClick={addtask}> Add </button>
         </form>
       </div>
+      
 
       {/* Listt */}
       {
         tasks.map((todo)=>(
-     
-    <div className='flex justify-between border-2 border-slate-900 mt-2'>
-
-    <div className='mt-2 flex w-2/4 justify-between '>
-      <h2 className='font-semibold text-xl'> fdg{todo.task} </h2>
-      <h2 className='font-semibold text-xl'> {todo.desc} </h2>
-    </div>
-
-
-      <div className=''>
-      <button className='bg-slate-300 text-black text-semibold font-semibold p-4 mx-2'> Completed </button>
-      <button className='bg-green-300 text-black text-semibold font-semibold p-4 mx-2'> Edit  </button>
-      <button className='bg-red-400 text-black text-semibold font-semibold p-4 mx-2'> Delete </button>
-      </div>
-
-
-    </div>
+          <Items todo={todo} removetask={removetask} updatetask={updatetask}/>
       ))
     }
     </div>
